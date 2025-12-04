@@ -32,7 +32,9 @@ namespace Day1
                     ReturnVal++;
                 }
 
-                position = ((position % 100) + 100) % 100;
+                position %= 100;
+                position = position < 0 ?
+                    (position + 100) : position;
             }
         }
     }
