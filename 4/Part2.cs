@@ -1,56 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Day4
 {
     internal class Part2
     {
-        public long ReturnVal;
+        public int ReturnVal;
+
+        public List<(int x, int y)> points = new List<(int x, int y)>()
+        {
+            (-1, -1), (0, -1), (1, -1),
+            (-1, 0),           (1, 0),
+            (-1, 1),  (0, 1),  (1, 1)
+        };
 
         public Part2()
         {
-            var lines = File.ReadAllLines("Input.txt");
+            List<char[]> charLines = new List<char[]>();   
 
-            foreach (var line in lines)
+            foreach (var line in File.ReadLines("Input.txt"))
             {
-                int[] digits = [0,0,0,0,0,0,0,0,0,0,0,0];
-                var position = digits.Length;
-                int x = 0;
-                int foundPos = 0;
-
-                while (position > 0)
-                {
-                    while (x < line.Length)
-                    {
-                        if (x + position > line.Length)
-                        {
-                            break;
-                        }
-
-                        var currentNumber = line[x] - '0';
-
-                        if (currentNumber > digits[Math.Abs(position - 12)])
-                        {
-                            digits[Math.Abs(position - 12)] = currentNumber;
-                            foundPos = x;
-                        }
-                        x++;
-                    }
-
-                    x = foundPos + 1;
-                    position--;
-                }
-
-                long foundNumber = 0;
-
-                for (int i = 0; i < digits.Length ; i++)
-                {
-                    foundNumber = (foundNumber * 10) + digits[i];
-                }
-
-                ReturnVal += foundNumber;
+                charLines.Add(line.ToCharArray());
             }
+
+            var priorReturn = -1;
+
+            while (ReturnVal != priorReturn)
+            {
+                priorReturn = ReturnVal;
+                for (int y = 0; y < charLines.Count; y++)
+                {
+                    for (int x = 0; x < charLines[y].Length; x++)
+                    {
+                        if (charLines[y][x] != '@')
+                        {
+                            continue;
+                        }
+
+                        var surrounding = 0;
+
+                        foreach (var point in points)
+                        {
+                            if (GetCharAt(x + point.x, y + point.y, charLines) == '@')
+                            {
+                                surrounding++;
+                            }
+                        }
+
+                        if (surrounding < 4)
+                        {
+                            ReturnVal++;
+                            charLines[y][x] = ' ';
+                        }
+                    }
+                }
+            }
+        }
+
+        public char GetCharAt(int x, int y, List<char[]> lines)
+        {
+            if (y < 0 || y >= lines.Count)
+            {
+                return ' ';
+            }
+            if (x < 0 || x >= lines[y].Length)
+            {
+                return ' ';
+            }
+            return lines[y][x];
         }
     }
 }
