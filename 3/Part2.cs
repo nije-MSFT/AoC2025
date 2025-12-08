@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Day3 
+namespace Day3
 {
     internal class Part2
     {
@@ -12,45 +12,44 @@ namespace Day3
         {
             var lines = File.ReadAllLines("Input.txt");
 
-            foreach (var range in lines[0].Split(','))
+            foreach (var line in lines)
             {
-                var startNumber = long.Parse(range.Split('-')[0]);
-                var endNumber = long.Parse(range.Split('-')[1]);
+                int[] digits = [0,0,0,0,0,0,0,0,0,0,0,0];
+                var position = digits.Length;
+                int x = 0;
+                int foundPos = 0;
 
-                for (long i = startNumber; i <= endNumber; i++)
+                while (position > 0)
                 {
-                    var asString = i.ToString();
-                    var digits = (int)Math.Floor(Math.Log10(i) + 1);
-
-                    for (int d = digits / 2; d >= 1; d--)
+                    while (x < line.Length)
                     {
-                        if (digits % d != 0)
+                        if (x + position > line.Length)
                         {
-                            continue;
-                        }
-
-                        var stringToMatch = asString.Substring(0, d);
-
-                        var index = d;
-                        var foundMatch = true;
-
-                        while (index + d <= digits)
-                        {
-                            if (asString.Substring(index, d) != stringToMatch)
-                            {
-                                foundMatch = false;
-                                break;
-                            }
-                            index += d;
-                        }
-
-                        if (foundMatch)
-                        {
-                            ReturnVal += i;
                             break;
                         }
+
+                        var currentNumber = line[x] - '0';
+
+                        if (currentNumber > digits[Math.Abs(position - 12)])
+                        {
+                            digits[Math.Abs(position - 12)] = currentNumber;
+                            foundPos = x;
+                        }
+                        x++;
                     }
+
+                    x = foundPos + 1;
+                    position--;
                 }
+
+                long foundNumber = 0;
+
+                for (int i = 0; i < digits.Length ; i++)
+                {
+                    foundNumber = (foundNumber * 10) + digits[i];
+                }
+
+                ReturnVal += foundNumber;
             }
         }
     }
