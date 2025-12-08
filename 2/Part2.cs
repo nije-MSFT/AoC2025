@@ -19,19 +19,36 @@ namespace Day2
 
                 for (long i = startNumber; i <= endNumber; i++)
                 {
+                    var asString = i.ToString();
                     var digits = (int)Math.Floor(Math.Log10(i) + 1);
 
-                    if (digits % 2 == 1)
+                    for (int d = digits / 2; d >= 1; d--)
                     {
-                        continue;
-                    }
+                        if (digits % d != 0)
+                        {
+                            continue;
+                        }
 
-                    var firsthalf = i.ToString().Substring(0, digits / 2);
-                    var secondhalf = i.ToString().Substring(digits / 2);
+                        var stringToMatch = asString.Substring(0, d);
 
-                    if (firsthalf == secondhalf)
-                    {
-                        ReturnVal += i;
+                        var index = d;
+                        var foundMatch = true;
+
+                        while (index + d <= digits)
+                        {
+                            if (asString.Substring(index, d) != stringToMatch)
+                            {
+                                foundMatch = false;
+                                break;
+                            }
+                            index += d;
+                        }
+
+                        if (foundMatch)
+                        {
+                            ReturnVal += i;
+                            break;
+                        }
                     }
                 }
             }

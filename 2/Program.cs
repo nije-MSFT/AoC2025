@@ -8,7 +8,7 @@
             var part2 = new Part2();
 
             Console.WriteLine($"Part1: {part1.ReturnVal}");
-            //Console.WriteLine($"Part2: {part2.ReturnVal}");
+            Console.WriteLine($"Part2: {part2.ReturnVal}");
         }
     }
 }
