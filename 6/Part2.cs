@@ -19,14 +19,14 @@ namespace Day6
 
             for (int x = lines[0].Length - 1; x >= 0; x--)
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new char[4];
 
                 for (int y = 0; y <= lines.Length - 2; y++)
                 {
-                    sb.Append(lines[y][x]);
+                    sb[y] = lines[y][x];
                 }
 
-                var number = sb.ToString().Trim();
+                var number = new string(sb).Trim();
 
                 if (string.IsNullOrEmpty(number))
                 {
